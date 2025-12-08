@@ -24,15 +24,11 @@ from tensorflow.keras.optimizers import Adam
 
 
 
-# ============================================================
-#  DATA SPLITTING HELPERS
-# ============================================================
 
 def split_X_y(df, target="SO2"):
     """Splits dataframe into X and y."""
     X = df.drop(columns=[target])
     
-    # Remove any datetime columns — regardless of frequency
     datetime_cols = X.select_dtypes(include=["datetime", "datetime64"]).columns
     if len(datetime_cols) > 0:
         X = X.drop(columns=datetime_cols)
@@ -67,9 +63,6 @@ def time_series_split(df, n_splits=5):
 
 
 
-# ============================================================
-#  MODEL BUILDERS
-# ============================================================
 
 def build_linear_regression(**params):
     return LinearRegression(**params)
@@ -92,9 +85,7 @@ def build_xgb(**params):
 
 
 
-# ============================================================
-#  GENERIC CROSS VALIDATION FOR SKLEARN MODELS
-# ============================================================
+
 
 def ts_cross_val_sklearn(model_builder, param_grid, df, target="SO2", n_splits=5):
     """
@@ -144,9 +135,6 @@ def ts_cross_val_sklearn(model_builder, param_grid, df, target="SO2", n_splits=5
 
 
 
-# ============================================================
-#  LSTM HELPERS + LSTM CROSS VALIDATION
-# ============================================================
 
 def prepare_lstm_data(df, target="SO2", window=24):
     values = df.values
@@ -180,7 +168,6 @@ def ts_cross_val_lstm(df, target="SO2", n_splits=3,
     More expensive than sklearn models.
     """
 
-    # make param combinations
     from itertools import product
     keys = list(param_grid.keys())
     vals = list(param_grid.values())

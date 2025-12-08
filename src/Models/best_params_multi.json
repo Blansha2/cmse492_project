@@ -1,0 +1,18 @@
+{
+    "linear_regression": {},
+    "random_forest": {
+        "n_estimators": 300,
+        "max_depth": null
+    },
+    "xgboost": {
+        "n_estimators": 300,
+        "learning_rate": 0.05,
+        "max_depth": 8,
+        "subsample": 0.8,
+        "colsample_bytree": 0.9
+    },
+    "lstm": {
+        "lr": 0.001,
+        "units": 64
+    }
+}

@@ -21,9 +21,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense
 from tensorflow.keras.optimizers import Adam
 
-# ============================================================
-# DATA SPLITTING HELPERS
-# ============================================================
+
 
 def split_X_y(df, target="SO2"):
     """
@@ -31,7 +29,6 @@ def split_X_y(df, target="SO2"):
     """
     X = df.drop(columns=[target])
     
-    # Remove any datetime columns — regardless of frequency
     datetime_cols = X.select_dtypes(include=["datetime", "datetime64"]).columns
     if len(datetime_cols) > 0:
         X = X.drop(columns=datetime_cols)
@@ -40,9 +37,7 @@ def split_X_y(df, target="SO2"):
     return X, y
 
 
-# ============================================================
-# MODEL BUILDERS
-# ============================================================
+
 
 def build_linear_regression(**params):
     return LinearRegression(**params)
@@ -70,9 +65,7 @@ def build_xgb(n_estimators=300, learning_rate=0.05, max_depth=6,
     )
 
 
-# ============================================================
-# GENERIC TRAINING FUNCTION FOR SKLEARN MODELS
-# ============================================================
+
 
 def train_model(model, df_train, df_test, target="SO2"):
     """
@@ -87,9 +80,7 @@ def train_model(model, df_train, df_test, target="SO2"):
     return model, X_test, y_test
 
 
-# ============================================================
-# LSTM HELPERS
-# ============================================================
+
 
 def prepare_lstm_data(df, target="SO2", window=24):
     """
@@ -129,15 +120,12 @@ def train_lstm(df_train, df_test, target="SO2", window=24,
     Full LSTM training pipeline.
     Returns trained model, training history, and test data (X_test, y_test)
     """
-    # Prepare data
     X_train, y_train = prepare_lstm_data(df_train, target, window)
     X_test, y_test = prepare_lstm_data(df_test, target, window)
 
-    # Build model
     model = build_lstm_model(input_shape=(X_train.shape[1], X_train.shape[2]),
                              lr=lr, units=units)
 
-    # Train model
     history = model.fit(
         X_train, y_train,
         validation_data=(X_test, y_test),
